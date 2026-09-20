@@ -8,13 +8,27 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Download project ZIP
+      - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Extract project
+      - name: Show uploaded files
+        run: ls -lah
+
+      - name: Extract project code
         run: |
-          mkdir project
-          unzip -q kenisha-android-project-compatible.zip -d project
+          mkdir -p project
+          unzip -q kenisha-code.zip -d project
+
+      - name: Reassemble media
+        run: |
+          cat kenisha-media-01.zip.part kenisha-media-02.zip.part > media.zip
+          mkdir -p media
+          unzip -q media.zip -d media
+
+      - name: Copy media
+        run: |
+          mkdir -p project/app/src/main/assets
+          cp -R media/* project/app/src/main/assets/
 
       - name: Set up Java
         uses: actions/setup-java@v4
